@@ -94,7 +94,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         mHeadingLabel = (TextView) findViewById(R.id.headingLabel);
-        mFingerprintImage = (ImageView) findViewById(R.id.fingerprintimage);
+        mFingerprintImage = (ImageView) findViewById(R.id.imageView);
         mParaLabel = (TextView) findViewById(R.id.paraLabel);
 
 
@@ -121,7 +121,7 @@ public class MainActivity extends AppCompatActivity {
 
             } else {
 
-                mParaLabel.setText("Place your Finger on Scanner to Access the App.");
+                mParaLabel.setText("Place your Finger on Scanner to login");
 
                 generateKey();
 

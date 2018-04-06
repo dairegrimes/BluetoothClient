@@ -56,14 +56,14 @@ public class FingerprintHandler extends FingerprintManager.AuthenticationCallbac
     @Override
     public void onAuthenticationSucceeded(FingerprintManager.AuthenticationResult result) {
 
-        this.update("You can now access the app.", true);
+        this.update("You can now login.", true);
 
     }
 
     private void update(String s, boolean b) {
 
         TextView paraLabel = (TextView) ((Activity)context).findViewById(R.id.paraLabel);
-        ImageView imageView = (ImageView) ((Activity)context).findViewById(R.id.fingerprintimage);
+        ImageView imageView = (ImageView) ((Activity)context).findViewById(R.id.imageView);
 
         paraLabel.setText(s);
 
