@@ -5,6 +5,7 @@ package com.example.daire.bluetoothclient;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -17,6 +18,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Set;
 
+import java.util.concurrent.TimeUnit;
 
 
 import android.Manifest;
@@ -67,6 +69,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView mHeadingLabel;
     private ImageView mFingerprintImage;
     private TextView mParaLabel;
+    private Context context;
 
     private FingerprintManager fingerprintManager;
     private KeyguardManager keyguardManager;
@@ -103,19 +106,19 @@ public class MainActivity extends AppCompatActivity {
             fingerprintManager = (FingerprintManager) getSystemService(FINGERPRINT_SERVICE);
             keyguardManager = (KeyguardManager) getSystemService(KEYGUARD_SERVICE);
 
-            if(!fingerprintManager.isHardwareDetected()){
+            if (!fingerprintManager.isHardwareDetected()) {
 
                 mParaLabel.setText("Fingerprint Scanner not detected in Device");
 
-            } else if (ContextCompat.checkSelfPermission(this, Manifest.permission.USE_FINGERPRINT) != PackageManager.PERMISSION_GRANTED){
+            } else if (ContextCompat.checkSelfPermission(this, Manifest.permission.USE_FINGERPRINT) != PackageManager.PERMISSION_GRANTED) {
 
                 mParaLabel.setText("Permission not granted to use Fingerprint Scanner");
 
-            } else if (!keyguardManager.isKeyguardSecure()){
+            } else if (!keyguardManager.isKeyguardSecure()) {
 
                 mParaLabel.setText("Add Lock to your Phone in Settings");
 
-            } else if (!fingerprintManager.hasEnrolledFingerprints()){
+            } else if (!fingerprintManager.hasEnrolledFingerprints()) {
 
                 mParaLabel.setText("You should add atleast 1 Fingerprint to use this Feature");
 
@@ -125,47 +128,22 @@ public class MainActivity extends AppCompatActivity {
 
                 generateKey();
 
-                if (cipherInit()){
+                if (cipherInit()) {
 
                     FingerprintManager.CryptoObject cryptoObject = new FingerprintManager.CryptoObject(cipher);
                     FingerprintHandler fingerprintHandler = new FingerprintHandler(this);
                     fingerprintHandler.startAuth(fingerprintManager, cryptoObject);
 
+
                 }
             }
 
         }
+        //Connect();
 
-
-
-
-
-
-
-
-        mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-        if (mBluetoothAdapter == null) {
-            // Device does not support Bluetooth
-            Toast.makeText(this, "No bluetooth supported", Toast.LENGTH_LONG).show();
-            return;
-        }
-        if (!mBluetoothAdapter.isEnabled())
-        {
-            Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-            startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
-        }
-
-        Set<BluetoothDevice> pairedDevices = mBluetoothAdapter.getBondedDevices();
-        if (pairedDevices.size() > 0) {
-            // Try to connect to the first paired device.
-            // In real use case we should ask the user to select which one he wants to connect to.
-            BluetoothDevice deviceToConnect = pairedDevices.iterator().next();
-            new Thread(new ConnectDevice(deviceToConnect)).start();
-        } else {
-            Toast.makeText(this, "No device paired...", Toast.LENGTH_LONG).show();
-            return;
-        }
     }
+
+
 
 
     @TargetApi(Build.VERSION_CODES.M)
@@ -194,6 +172,36 @@ public class MainActivity extends AppCompatActivity {
 
             e.printStackTrace();
 
+        }
+
+    }
+
+
+    void Connect()
+    {
+        mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+        if (mBluetoothAdapter == null) {
+            // Device does not support Bluetooth
+            Toast.makeText(this, "No bluetooth supported", Toast.LENGTH_LONG).show();
+            return;
+        }
+        if (!mBluetoothAdapter.isEnabled()) {
+            Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+            startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
+        }
+
+        Set<BluetoothDevice> pairedDevices = mBluetoothAdapter.getBondedDevices();
+        if (pairedDevices.size() > 0) {
+            // Try to connect to the first paired device.
+            // In real use case we should ask the user to select which one he wants to connect to.
+            BluetoothDevice deviceToConnect = pairedDevices.iterator().next();
+
+            new Thread(new ConnectDevice(deviceToConnect)).start();
+
+
+        } else {
+            Toast.makeText(this, "No device paired...", Toast.LENGTH_LONG).show();
+            return;
         }
 
     }
@@ -275,6 +283,8 @@ public class MainActivity extends AppCompatActivity {
             }
 
 
+
+
             // Writes to the socket
             try {
                 mOutput.write(1);
@@ -284,12 +294,12 @@ public class MainActivity extends AppCompatActivity {
 
 
             // Closes the socket
-            try
-            {
+            try {
                 mmSocket.close();
             } catch (IOException e) {
                 e.printStackTrace();
             }
+
         }
 
     }

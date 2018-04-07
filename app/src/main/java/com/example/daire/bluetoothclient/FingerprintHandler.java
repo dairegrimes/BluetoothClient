@@ -13,15 +13,18 @@ import android.support.v4.content.ContextCompat;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+
 @TargetApi(Build.VERSION_CODES.M)
 public class FingerprintHandler extends FingerprintManager.AuthenticationCallback {
 
     private Context context;
-
+    MainActivity mActivity = new MainActivity();
+    public boolean login = false;
 
     public FingerprintHandler(Context context){
 
         this.context = context;
+
 
     }
 
@@ -58,6 +61,9 @@ public class FingerprintHandler extends FingerprintManager.AuthenticationCallbac
 
         this.update("You can now login.", true);
 
+
+
+
     }
 
     private void update(String s, boolean b) {
@@ -74,7 +80,7 @@ public class FingerprintHandler extends FingerprintManager.AuthenticationCallbac
         } else {
             paraLabel.setTextColor(ContextCompat.getColor(context, R.color.colorPrimary));
             imageView.setImageResource(R.mipmap.action_done);
-
+            mActivity.Connect();
 
         }
 
