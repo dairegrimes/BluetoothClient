@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
 import android.widget.Toast;
 import java.security.*;
 
@@ -20,7 +21,9 @@ import java.util.Set;
 
 import java.util.concurrent.TimeUnit;
 
+import com.google.zxing.Result;
 
+import me.dm7.barcodescanner.zxing.ZXingScannerView;
 import android.Manifest;
 import android.annotation.TargetApi;
 import android.app.KeyguardManager;
@@ -64,12 +67,14 @@ import javax.crypto.SecretKey;
 
 
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity  implements ZXingScannerView.ResultHandler {
 
     private TextView mHeadingLabel;
     private ImageView mFingerprintImage;
     private TextView mParaLabel;
     private Context context;
+
+    private ZXingScannerView zXingScannerView;
 
     private FingerprintManager fingerprintManager;
     private KeyguardManager keyguardManager;
@@ -140,6 +145,26 @@ public class MainActivity extends AppCompatActivity {
 
         }
         //Connect();
+
+    }
+    public void scan(View view){
+        zXingScannerView =new ZXingScannerView(getApplicationContext());
+        setContentView(zXingScannerView);
+        zXingScannerView.setResultHandler(this);
+        zXingScannerView.startCamera();
+
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        zXingScannerView.stopCamera();
+    }
+
+    @Override
+    public void handleResult(Result result) {
+        Toast.makeText(getApplicationContext(),result.getText(),Toast.LENGTH_SHORT).show();
+        zXingScannerView.resumeCameraPreview(this);
 
     }
 

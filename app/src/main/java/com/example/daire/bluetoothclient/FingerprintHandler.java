@@ -80,7 +80,7 @@ public class FingerprintHandler extends FingerprintManager.AuthenticationCallbac
         } else {
             paraLabel.setTextColor(ContextCompat.getColor(context, R.color.colorPrimary));
             imageView.setImageResource(R.mipmap.action_done);
-            mActivity.Connect();
+           // mActivity.Connect();
 
         }
 

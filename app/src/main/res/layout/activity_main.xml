@@ -22,7 +22,9 @@
         android:id="@+id/paraLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="129dp"
         android:padding="20dp"
         android:text="Place your fingerprint on the sensor to login"
         android:textAlignment="center" />
@@ -31,8 +33,15 @@
         android:id="@+id/imageView"
         android:layout_width="83dp"
         android:layout_height="74dp"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="119dp"
+        android:layout_centerInParent="true"
         app:srcCompat="@mipmap/fingerprintimage" />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Scane"
+        android:background="@color/colorPrimary"
+        android:textColor="#fff"
+        android:onClick="scan"/>
+
 </RelativeLayout>
